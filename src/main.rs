@@ -26,6 +26,26 @@ fn main() {
                     println!("Error: Please specify a department.");
                 }
             }
+            "remove" => {
+                if let Some(index) = command.iter().position(|s| s == "from") {
+                    let name = command[1..index].join(" ");
+                    let department = command[index + 1].clone();
+
+                    if let Some(names) = departments.get_mut(&department) {
+                        if let Some(pos) = names.iter().position(|n| n == &name) {
+                            names.remove(pos);
+                            save_departments(&departments);
+                            println!("Removed {} from {} department.", name, department);
+                        } else {
+                            println!("Person {} not found in {} department.", name, department);
+                        }
+                    } else {
+                        println!("Department {} not found.", department);
+                    }
+                } else {
+                    println!("Error: Please use the 'remove <name> from <department>' format.");
+                }
+            }
             "list" => {
                 if command.len() == 1 {
                     for department in departments.keys() {
